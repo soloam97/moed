@@ -362,13 +362,15 @@ def antitrend(mass, N, L):
 
 
 # Чтение массива из файла .dat
-def open_reader(file):
+def open_reader(file, format):
+    d = {'b': 1, 'B': 1, 'h': 2, 'H': 2, 'i': 4, 'I': 4, 'l': 4, 'L': 4,
+               'q': 8, 'Q': 8, 'f': 4, 'd': 8}
     with open(file, "rb") as binary_file:
         figures = []
 
         data = binary_file.read()
-        for i in range(0, len(data), 4):
-            elem = struct.unpack('f', data[i:i + 4])
+        for i in range(0, len(data), d[format]):
+            elem = struct.unpack(format, data[i:i + d[format]])
             figures.append(elem[0])
         return figures
 
@@ -403,8 +405,8 @@ def inv_fourier_transf(Xm, N):
         for k in range(N):
             re[m] += (Xm[k] * cos((2 * np.pi * m * k) / N))
             im[m] += (Xm[k] * sin((2 * np.pi * m * k) / N))
-        # im[m] *= (1 / N)
-        # re[m] *= (1 / N)
+        im[m] *= (1 / N)
+        re[m] *= (1 / N)
         xm.append(re[m] + im[m])
     return xm
 
@@ -627,8 +629,8 @@ def re_and_im(mass, N):
         for k in range(N):
             re[m] += (mass[k] * cos((2 * np.pi * m * k) / N))
             im[m] += (mass[k] * sin((2 * np.pi * m * k) / N))
-        re[m] *= (1 / N)
-        im[m] *= (1 / N)
+        # re[m] *= (1 / N)
+        # im[m] *= (1 / N)
 
     return re, im
 
@@ -654,46 +656,49 @@ def complex_ratio(x_re, x_im, y_re, y_im, N):
 # ------------------------------------------------------------------------------------------------------------------------
 
 # Функция нормировки
-def normalization(mass, N=255):
+def normalization(mass: list, dim: int, N=255):
     '''
     Функция нормировки
-    :param mass: список значений оттенков серости пикселей
+    :param mass: одномерный список значений оттенков серости пикселей
+    :param dim: размерность массива
     :param N: количество элементов
     :return: норма
     '''
-    norm = []
-    min_mass = min(mass)
-    max_mass = max(mass)
-    for num in mass:
-        norm.append(((num - min_mass) / (max_mass - min_mass)) * N)
-    return norm
+    if dim == 1:
+        norm = []
+        min_mass = min(mass)
+        max_mass = max(mass)
+        for pix in mass:
+            norm.append(int(((pix - min_mass) / (max_mass - min_mass)) * N))
+
+        return norm
+
+    norm_mass = []
+    width, height = len(mass[0]), len(mass)
+    for row in range(height):
+        for col in range(width):
+            norm_mass.append(mass[row][col])
+    norm_mass = normalization(norm_mass, dim=1)
+
+    return np.array(norm_mass).reshape(height, width)
 
 
-def image_read():
-    mode = int(input('mode:'))  # Считываем номер преобразования.
-    image = Image.open("grace.jpg")  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
-    return pix
-
-
-def read_png(file):
-    img = mpimg.imread(file)
-    return img
-
-
+# Функия для чтения jpg файла
 def read_jpg_gray(file):
     image = Image.open(file).convert('L')
     return image
 
 
-def read_xcr():
-    pass
-
-
+# Функция для масштабирования изображения
 def image_scale(image, const, type, mode):
+    '''
+        Функция мастабирует изображение в const раз
+    :param image: считанное изображение с помощью read_jpg_gray()
+    :param const: во сколько раз увеличивать/уменьшать изображение
+    :param type: метод масштабирования nn - ближайший сосед, bi билинейная интерполяция
+    :param mode: increased - увеличить, decreased - уменьшить
+    :return: отмасштабированное изображение
+    '''
     pix = image.load()  # Выгружаем значения пикселей
     w, h = image.size[0], image.size[1]
 
@@ -763,76 +768,60 @@ def image_scale(image, const, type, mode):
     return image_resized
 
 
-def pillow_image_grayscale_negative(image):
-    pix = image.load()
-    w, h = image.size[0], image.size[1]
+def negative_matrix_pix(matrix_pixels):
+    '''
+        Перевод пикселей входной матрицы изображения в негатив
+    :param matrix_pixels: numpy матрица пикселей изображения
+    :return: матрица пикселей в негативе
+    '''
+    width, height = len(matrix_pixels[0]), len(matrix_pixels)  # Ширина и высота изображения
 
-    image_negative = Image.new('L', (w, h))
-    draw = ImageDraw.Draw(image_negative)
+    # Нормировка пикселей построчно
+    matrix_pixels = normalization(matrix_pixels, dim=2)
 
-    for col in range(w):
-        for row in range(h):
-            draw.point((col, row), 255 - pix[col, row])
+    # Перевод пикселей в негатив
+    for row in range(height):
+        for col in range(width):
+            matrix_pixels[row][col] = 255 - matrix_pixels[row][col]
 
-    return image_negative
-
-
-def pillow_image_grayscale_gammacorr(image, C, Y):
-    pix = image.load()
-    w, h = image.size[0], image.size[1]
-    gammacorr = []
-
-    image_gammacorr = Image.new('L', (w, h))
-    draw = ImageDraw.Draw(image_gammacorr)
-
-    for col in range(w):
-        for row in range(h):
-            gammacorr.append(int(C * pix[col, row] ** Y))
-
-    gammacorr_norm = normalization(gammacorr, 255)
-
-    i = 0
-    for col in range(w):
-        for row in range(h):
-            draw.point((col, row), int(gammacorr_norm[i]))
-            i += 1
-
-    return image_gammacorr
+    return matrix_pixels
 
 
-def pillow_image_grayscale_log(image, C):
-    pix = image.load()
-    w, h = image.size[0], image.size[1]
-    log = []
+def gamma_correction(matrix_pixels, const, gamma):
+    '''
+        Обработка пикселей входной матрицы изображения гамма коррекцией
+    :param matrix_pixels: numpy матрица пикселей изображения
+    :param const: множитель коррекции
+    :param gamma: степенная константа гамма коррекции
+    :return: обработанная матрица пикселей
+    '''
+    width, height = len(matrix_pixels[0]), len(matrix_pixels)  # Ширина и высота изображения
 
-    image_log = Image.new('L', (w, h))
-    draw = ImageDraw.Draw(image_log)
+    for row in range(height):
+        for col in range(width):
+            matrix_pixels[row][col] = const * (matrix_pixels[row][col] ** gamma)
 
-    for col in range(w):
-        for row in range(h):
-            log.append(C * np.log(pix[col, row] + 1))
+    normalization(matrix_pixels, dim=2)
 
-    log_norm = normalization(log, 255)
-
-    i = 0
-    for col in range(w):
-        for row in range(h):
-            draw.point((col, row), int(log_norm[i]))
-            i += 1
-
-    return image_log
+    return matrix_pixels
 
 
-def pillow_image_grayscale_grad_preobr(r):
-    func = P()
-    CDF = integrate.quad(func, 0, r)
-    return 0
+def log_correction(matrix_pixels, const):
+    '''
+        Обработка пикселей входной матрицы изображения логарифмической коррекцией
+    :param matrix_pixels: numpy матрица пикселей изображения
+    :param const: множитель коррекции
+    :return: обработанная матрица пикселей
+    '''
+    width, height = len(matrix_pixels[0]), len(matrix_pixels)  # Ширина и высота изображения
 
+    for row in range(height):
+        for col in range(width):
+            matrix_pixels[row][col] = const * np.log(matrix_pixels[row][col] + 1)
 
-def pillow_image_grayscale_hist(image):
-    pix = list(image.getdata())
-    data = pd.Series(pix)
-    return data
+    normalization(matrix_pixels, dim=2)
+
+    return matrix_pixels
 
 
 # Чтение массива пикселей из xcr файла
@@ -847,25 +836,33 @@ def open_reader_xcr(file):
         return figures
 
 
+# Гистограмма изображения
 def image_histogram(image):
-    pixels = image.load()
-    w, h = image.size[0], image.size[1]
+    '''
+       Считает гистограмму входного изображения
+    :param image: изображение, считанное с помощью функции read_jpg_gray('file_name')
+    :return:
+    '''
+    width, height = image.size[0], image.size[1]
+    matrix_pixels = np.array(image).reshape(height, width)
+    # matrix_pixels = normalization(matrix_pixels, dim=2)
 
-    i = 0
     pixels_1d = []
-    for col in range(w):
-        for row in range(h):
-            pixels_1d.append(pixels[col, row])
+    for row in range(height):
+        for col in range(width):
+            pixels_1d.append(matrix_pixels[row][col])
 
     # нормализация данных
-    S = col * row
-    pixels_1d = normalization(pixels_1d)
-    for i in range(S):
-        pixels_1d[i] = int(pixels_1d[i])
+    pixels_1d = normalization(pixels_1d, dim=1)
+    matrix_pixels = np.array(pixels_1d).reshape(height, width)
 
     # создаем список гистограммы
-    image_hist_y = [0 for i in range(255)]
-    image_hist_x = [i for i in range(255)]
+    image_hist_y = [0 for i in range(256)]
+    image_hist_x = [i for i in range(256)]
+
+    # for row in range(height):
+    #     for pix in matrix_pixels[row]:
+    #         image_hist_y[pix] += 1
 
     index_hist = 0
     for i in image_hist_x:
@@ -878,26 +875,26 @@ def image_histogram(image):
 
 
 # Создание картинки по считываемым данным по одномерному массиву пикселей
-def drawing_image_new(pixels, w, h):
+def drawing_image_new(matrix_pixels, width, height):
     '''
     Функция рисует картинку в оттенках серого по вхожному одномерному списку пикселей
-    :param pixels: одномерный список оттенков серого каждого пикселя
+    :param matrix_pixels: двумерный список оттенков серого каждого пикселя
     :param w: ширина создаваемой картинки
     :param h: высота создаваемой картинки
     :return: image_new - картинка в оттенках серого
     '''
-    image_new = Image.new('L', (w, h))  # создаем пустую картинку в оттенках серого с шириной w и высотой h
+    image_new = Image.new('L', (width, height))  # создаем пустую картинку в оттенках серого с шириной w и высотой h
     draw = ImageDraw.Draw(image_new)  # Запускаем инструмент для рисования
 
     # нормализуем значения оттенков серого
-    S = 255
-    image_new_norm = normalization(pixels, S)
-    # image_new_norm = pixels
+    image_new_norm = normalization(matrix_pixels, dim=2)
+    # image_new_norm = matrix_pixels  # Для фильтров среднего и медианного
+
     # заполняем значения пикселей новой картинки оттенками серого входного списка
     i = 0
-    for col in range(w):
-        for row in range(h):
-            draw.point((col, row), int(image_new_norm[i]))
+    for y in range(height):
+        for x in range(width):
+            draw.point((x, y), int(image_new_norm[y][x]))
             i += 1
 
     return image_new
@@ -905,12 +902,15 @@ def drawing_image_new(pixels, w, h):
 
 def equalization(image):
     # Считываем  файл
-    w, h = image.size[0], image.size[1]
-    pix = image.load()
-    # Строим гистограмму
+    width, height = image.size[0], image.size[1]
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    pixels_1d = []
+    for row in range(height):
+        for col in range(width):
+            pixels_1d.append(matrix_pixels[row][col])
+
     x, y, pixels_1d = image_histogram(image)
-    plt.plot(x, y)
-    plt.show()
 
     # Производим интегрирование
     cdf = [0]
@@ -920,18 +920,22 @@ def equalization(image):
     for i in range(255):
         cdf[i] /= max_cdf
 
-    plt.plot(x, cdf)
-    plt.show()
-
-    # new_image = drawing_image_new(pixels_1d, w, h)
-    # new_image.show()
-
-    for i in range(w * h):
+    for i in range(width * height):
         for j in range(255):
             if pixels_1d[i] == j:
                 pixels_1d[i] = cdf[j] * 255
 
-    new_image = drawing_image_new(pixels_1d, w, h)
+    # for row in range(height):
+    #     for col in range(width):
+    #         for j in range(255):
+    #             if matrix_pixels[row, col] == j:
+    #                 matrix_pixels[row, col] = cdf[j] * 255
+
+    matrix_pixels = np.reshape(pixels_1d, (height, width))
+    # new_image = Image.fromarray(matrix_pixels)
+
+    new_image = drawing_image_new(matrix_pixels, width, height)
+
     return new_image
 
 
@@ -945,11 +949,11 @@ def derivative(matrix_pix, w, h):
     :return: матрицу производных
     '''
     data = []
-    for i in range(w):
-        row = []
-        for j in range(h - 1):
-            row.append(matrix_pix[i][j + 1] - matrix_pix[i][j])
-        data.append(row)
+    for row in range(h):
+        row_deriv = []
+        for col in range(w - 1):
+            row_deriv.append(int(matrix_pix[row][col + 1]) - int(matrix_pix[row][col]))
+        data.append(row_deriv)
 
     return data
 
@@ -966,11 +970,52 @@ def image_conv(input_mass, control_mass, w, h, m):
     :return: отфильтрованное изображения
     '''
     data_conv = []
-    for i in range(w):
+    for i in range(h):
         temp = convolution((input_mass[i]), control_mass)
-        data_conv.append(temp[m:(h + m)])
+        data_conv.append(temp[m:(w + m)])
 
     return data_conv
+
+
+# Избавление от полос Муара
+def anti_muar(image):
+    width, height = image.size[0], image.size[1]
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    # Берем производную построчно
+    derivative_matrix = derivative(matrix_pixels, width, height)
+
+    # Создаем спетр для производной
+    # spectrum = ampl_spectr(derivative_matrix[0], width - 1)
+
+    # Создаем АКФ для производной
+    w_acf = width - 1
+    acf_of_derivative = acf(derivative_matrix[0], w_acf)
+
+    # Создаем спектр АКФ производной
+    spectr_acf_of_derivative = ampl_spectr(acf_of_derivative, w_acf)
+
+    # Находим пик на спектре АКФ производной
+    max_spectr = max(spectr_acf_of_derivative)
+    for i in range(w_acf):
+        if spectr_acf_of_derivative[i] == max_spectr:
+            fc = i
+            break
+
+    # Организуем режекторный фильтр
+    fs = width
+    dx = 1 / fs
+    m, fc1, fc2 = 32, fc - 15, fc + 15
+    input_mass = matrix_pixels
+    control_mass = bend_stop_filter(m, dx, fc1, fc2)
+
+    # Производим фильтрацию изображения с помощью свертки
+    conv_matrix_pix = image_conv(input_mass, control_mass, width - 1, height, m)
+
+    # Создаем изображение (width - 1) x height
+    conv_image = drawing_image_new(conv_matrix_pix, width - 1, height)
+
+    return conv_image
 
 
 # Функция нормировки пикселей
@@ -984,7 +1029,7 @@ def normalize_pixels(mass, N):
 
 
 # Функция добавляет аддитивный шум Гаусса на картинку
-def add_gauss_noise(file, level=20):
+def add_gauss_noise(file, mu=0.2, sigma=20):
     '''
         Функция реализует добавление аддитивного шума Гауссовского распределения
     :param file: входной файл
@@ -992,30 +1037,37 @@ def add_gauss_noise(file, level=20):
     :return: изображение с нормально распределенным шумом
     '''
     if type(file) == str:
-    # Загружаем картинку
+        # Загружаем картинку
         image = read_jpg_gray(file)
     else:
         image = file
-    w, h = image.size[0], image.size[1]
-    pixels = image.load()  # Выгружаем значения пикселей
+    width, height = image.size[0], image.size[1]
+    # pixels = image.load()  # Выгружаем значения пикселей
+    matrix_pixels = np.array(image).reshape(height, width)
 
     # моделируем Гауссовский шум
-    mu, sigma = 0.2, level
-    gaussNoise = np.random.normal(mu, sigma, size=[w, h])
+    gaussNoise = np.random.normal(mu, sigma, size=[height, width])
 
     # Добавление шума на изображение
     noisedImage = []
-    for col in range(w):
-        for row in range(h):
-            noisedImage.append(pixels[col, row] + gaussNoise[col, row])
+    matrix_pixels = matrix_pixels + gaussNoise
 
-    # Рисование изображения с шумом
-    image_add_noise = drawing_image_new(noisedImage, w, h)
+    # Создание зашумленного изображения
+    image_noised = drawing_image_new(matrix_pixels, width, height)
 
-    return image_add_noise
+    # # Добавление шума на изображение
+    # noisedImage = []
+    # for col in range(w):
+    #     for row in range(h):
+    #         noisedImage.append(pixels[col, row] + gaussNoise[col, row])
+    #
+    # # Рисование изображения с шумом
+    # image_add_noise = drawing_image_new(noisedImage, w, h)
+
+    return image_noised
 
 
-def add_impulse_noise(file, Pa=0.05, Pb=0.1):
+def add_impulse_noise(file, Pa=0.05, Pb=0.05):
     '''
         Функция реализует добавление аддитивного шума Гауссовского распределения
     :param file: входной файл
@@ -1028,25 +1080,26 @@ def add_impulse_noise(file, Pa=0.05, Pb=0.1):
         image = read_jpg_gray(file)
     else:
         image = file
-    w, h = image.size[0], image.size[1]
-    pixels = image.load()  # Выгружаем значения пикселей
-    pixels_1d = []
-    for col in range(w):
-        for row in range(h):
-            pixels_1d.append(pixels[col, row])
+    width, height = image.size[0], image.size[1]
+
+    matrix_pixels = np.array(image).reshape(height, width)
 
     # Моделируем импульсный шум
     a = 0
     b = 255
     randVals = np.random.uniform(low=0.0, high=1.0,
-                                 size=(w * h))  # массив случайных значений с нормальным распределением
-    noisedImpulse = pixels_1d.copy()
+                                 size=[height, width])  # массив случайных значений с нормальным распределением
+    randVals[randVals < Pa] = a
+    randVals[(randVals > Pa) & (randVals > Pa + Pb)] = b
 
-    for i in range(w * h):
-        if randVals[i] < Pa:
-            noisedImpulse[i] = a
-        elif Pa < randVals[i] < (Pa + Pb):
-            noisedImpulse[i] = b
+    # matrix_pixels = np.select([randVals == a, randVals == b], [a, b], default=matrix_pixels)
+
+    for row in range(height):
+        for col in range(width):
+            if randVals[row][col] < Pa:
+                matrix_pixels[row][col] = a
+            elif Pa < randVals[row][col] < (Pa + Pb):
+                matrix_pixels[row][col] = b
 
     # # Добавление шума на изображение
     # noisedImage2 = []
@@ -1054,7 +1107,7 @@ def add_impulse_noise(file, Pa=0.05, Pb=0.1):
     #     noisedImage2.append(pixels_1d[i] + noisedImpulse[i])
 
     # Рисование изображения с шумом
-    image_impulse_noise = drawing_image_new(noisedImpulse, w, h)
+    image_impulse_noise = drawing_image_new(matrix_pixels, width, height)
 
     return image_impulse_noise
 
@@ -1086,3 +1139,329 @@ def diff_by_row_for_trend(matrix_pixels, w, h):
         data.append(row)
 
     return data
+
+
+# def conservative_smoothing_gray(data, filter_size):
+#     temp = []
+#     indexer = filter_size // 2
+#     new_image = data.copy()
+#     nrow, ncol = data.shape
+#
+#     for i in range(nrow):
+#         for j in range(ncol):
+#             for k in range(i - indexer, i + indexer + 1):
+#                 for m in range(j - indexer, j + indexer + 1):
+#                     if (k > -1) and (k < nrow):
+#                         if (m > -1) and (m < ncol):
+#                             temp.append(data[k, m])
+#             temp.remove(data[i, j])
+#             max_value = max(temp)
+#             min_value = min(temp)
+#             if data[i, j] > max_value:
+#                 new_image[i, j] = max_value
+#             elif data[i, j] < min_value:
+#                 new_image[i, j] = min_value
+#             temp = []
+#     return new_image.copy()
+
+
+def spatial_filter_average(image, mask_size):
+    '''
+        На вход функции поступает считанное изображение с помощью функции read_jpg_grey('file_name')
+    :param image: матрица пикселей PILLOW
+    :return: матрица пикселей PILLOW
+    '''
+    width, height = image.size[0], image.size[1]  # Ширина и высота изображения
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    new_pixels = []  # Массив, в котором будут хранится значения пикселей нового изображения
+
+    for row in range(height):
+        for col in range(width):
+            for_new_pix = 0
+            if (row < (mask_size // 2)) or (row >= height - (mask_size // 2)) or (col < (mask_size // 2)) or (
+                    col >= width - (mask_size // 2)):
+                new_pixels.append(matrix_pixels[row][col])  # оставляем значения пикселей, если маска скраю
+            else:
+                for mask_row in range(mask_size):  # для каждого пикселя считаем значение среднего арифметического
+                    for mask_col in range(mask_size):  # маски 3x3, если середина маски находится не скраю изображения
+                        for_new_pix += matrix_pixels[
+                            (row - (mask_size // 2)) + mask_row][(col - (mask_size // 2)) + mask_col]
+
+                for_new_pix = for_new_pix // (mask_size ** 2)
+                new_pixels.append(for_new_pix)
+    filtered_pixels = np.array(new_pixels).reshape(height, width)
+
+    new_image = drawing_image_new(filtered_pixels, width, height)
+
+    return new_image
+
+
+def spatial_filter_median(image, mask_size):
+    '''
+        На вход функции поступает считанное изображение с помощью функции read_jpg_grey('file_name')
+    :param image: матрица пикселей PILLOW
+    :return: матрица пикселей PILLOW
+    '''
+    width, height = image.size[0], image.size[1]  # Ширина и высота изображения
+    new_pixels = []  # Массив, в котором будут хранится значения пикселей нового изображения
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    for row in range(height):
+        for col in range(width):
+            for_new_pix = []
+            if (row < (mask_size // 2)) or (row >= height - (mask_size // 2)) or (col < (mask_size // 2)) or (
+                    col >= width - (mask_size // 2)):
+                new_pixels.append(matrix_pixels[row][col])  # оставляем значения пикселей, если маска скраю
+            else:
+                for mask_row in range(mask_size):  # для каждого пикселя считаем значение среднего арифметического
+                    for mask_col in range(mask_size):  # маски 3x3, если середина маски находится не скраю изображения
+                        for_new_pix.append(
+                            matrix_pixels[(row - (mask_size // 2) + mask_row), (col - (mask_size // 2) + mask_col)])
+
+                for_new_pix.sort()
+                average_ind = ((mask_size ** 2) // 2) + 1
+                new_value = for_new_pix[average_ind]
+                new_pixels.append(new_value)
+
+    filtered_pixels = np.array(new_pixels).reshape(height, width)
+
+    new_image = drawing_image_new(filtered_pixels, width, height)
+
+    return new_image
+
+
+# Деконволюция изображения построчно
+def image_deconvolution(matrix_pix, function_core):
+    '''
+        Функция производит деконволюцию изображения по заданному воздействию
+    :param matrix_pix: матрица пикселей изображения
+    :param function_core: заданное воздейтсвие (характер шума, искажения изображения)
+    :return:
+    '''
+    width, height = len(matrix_pix[0]), len(matrix_pix)  # Ширина и высота изображения
+    len_control = len(function_core)
+
+    # Добавляем нули в конец массива control
+    length_core = len(function_core)  # Длина ядра смазывающей функции
+    for i in range(width - length_core):
+        function_core.append(0)
+
+    # Производим Фурье преобразование функции ядра
+    function_core_spectr = ampl_spectr(function_core, width)
+    core_re, core_im = re_and_im(function_core, width)
+
+    # Производим Фурье преобразование изображения построчно
+    image_spectr = []
+    image_spectr_re, image_spectr_im = [], []
+    module = []
+    mass = []
+    i = 0
+    for row in range(height):
+        temp = ampl_spectr(matrix_pix[row], width)
+        print(len(matrix_pix[row]), width, i)
+        i += 1
+
+        image_spectr.append(temp)
+        # Считаем действительные и мнимые части каждой строки изображения
+        image_re, image_im = re_and_im(matrix_pix[row], width)
+
+        # Комплексное деление строчки изображения и ядра функции
+        re, im = complex_ratio(image_re, image_im, core_re, core_im, width)
+
+        # Вычисление модуля отношения комплексных величин
+        module_temp = []
+        for col in range(width):
+            module_temp.append(re[col] + im[col])
+
+        module.append(module_temp)
+        # Обратное преобразование фурье
+        mass.append(inv_fourier_transf(module[row], width))
+
+    return mass
+
+
+def optimal_filter(re_h, im_h, re_g, im_g, N):
+    k = 0.001
+    ratio_re, ratio_im = [], []
+    for i in range(N):
+        corr_factor = (re_h[i] ** 2 + im_h[i] ** 2) + k  # Поправочный множитель
+
+        re_tmp = re_h[i] / corr_factor
+        im_tmp = - im_h[i] / corr_factor
+
+        ratio_re.append((re_h[i] * re_g[i] + im_h[i] * im_g[i]) / corr_factor)
+        ratio_im.append((re_h[i] * im_g[i] - im_h[i] * re_g[i]) / corr_factor)
+
+    return ratio_re, ratio_im
+
+
+def optimal_image_deconvolution(matrix_pix, function_core, k):
+    '''
+        Функция производит деконволюцию изображения по заданному воздействию
+    :param matrix_pix: матрица пикселей изображения
+    :param function_core: заданное воздейтсвие (характер шума, искажения изображения)
+    :return:
+    '''
+    width, height = len(matrix_pix[0]), len(matrix_pix)  # Ширина и высота изображения
+    len_control = len(function_core)
+
+    # Добавляем нули в конец массива control
+    length_core = len(function_core)  # Длина ядра смазывающей функции
+    for i in range(width - length_core):
+        function_core.append(0)
+
+    # Производим Фурье преобразование функции ядра
+    function_core_spectr = ampl_spectr(function_core, width)
+    re_h, im_h = re_and_im(function_core, width)
+
+    # Производим Фурье преобразование изображения построчно
+    image_spectr = []
+    image_spectr_re, image_spectr_im = [], []
+    module = []
+    mass = []
+    step = 0
+    for row in range(height):
+        temp = ampl_spectr(matrix_pix[row], width)
+        print(len(matrix_pix[row]), width, step)
+        step += 1
+
+        image_spectr.append(temp)
+        # Считаем действительные и мнимые части каждой строки изображения
+        re_g, im_g = re_and_im(matrix_pix[row], width)
+
+        # Комплексное деление строчки изображения и ядра функции
+        # k = 0.005
+        ratio_re, ratio_im = [], []
+        for i in range(width):
+            corr_factor = (re_h[i] ** 2 + im_h[i] ** 2) + k  # Поправочный множитель
+
+            ratio_re.append((re_h[i] * re_g[i] + im_h[i] * im_g[i]) / corr_factor)
+            ratio_im.append((re_h[i] * im_g[i] - im_h[i] * re_g[i]) / corr_factor)
+
+        # Вычисление модуля отношения комплексных величин
+        module_temp = []
+        for col in range(width):
+            module_temp.append(ratio_re[col] + ratio_im[col])
+
+        module.append(module_temp)
+        # Обратное преобразование фурье
+        mass.append(inv_fourier_transf(module[row], width))
+
+    return mass
+
+
+def gradient(matrix_pixels, axis):
+    width, height = len(matrix_pixels[0]), len(matrix_pixels)
+    new_matrix = []
+    if axis == 'row':
+        for row in range(height):
+            new_row = []
+            for col in range(width - 1):
+                new_row.append(int(matrix_pixels[row][col + 1]) - int(matrix_pixels[row][col]))
+            new_matrix.append(new_row)
+
+        gradient_matrix = np.array(new_matrix).reshape(height, width - 1)
+    else:
+        for col in range(width):
+            new_col = []
+            for row in range(height - 1):
+                new_col.append(int(matrix_pixels[row + 1][col]) - int(matrix_pixels[row][col]))
+            new_matrix.append(new_col)
+        new_matrix = np.array(new_matrix).reshape(width, height - 1)
+        new_matrix = new_matrix.transpose()
+
+        gradient_matrix = np.array(new_matrix).reshape(height - 1, width)
+
+    return gradient_matrix
+
+
+def laplasian(m):
+    width, height = len(m[0]), len(m)
+    new_matrix = []
+    for row in range(1, height - 1):
+        new_row = []
+        for col in range(1, width - 1):
+            new_row.append(
+                int(m[row + 1][col]) + int(m[row - 1][col]) + int(m[row][col + 1]) + int(m[row][col - 1]) - int(
+                    4 * m[row][col]))
+
+        new_matrix.append(new_row)
+
+    gradient_matrix = np.array(new_matrix).reshape(height - 2, width - 2)
+
+    return gradient_matrix
+
+
+def erosion(image, mask_x, mask_y):
+    er_mask = np.full((mask_y, mask_x), 255)
+
+    width, height = image.size[0], image.size[1]  # Ширина и высота изображения
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    new_matrix = []
+    for row in range(height):
+        new_row = []
+        for col in range(width):
+            if (row < (mask_y // 2)) or (row >= height - (mask_y // 2)) or (col < (mask_x // 2)) or (
+                    col >= width - (mask_x // 2)):
+                new_row.append(matrix_pixels[row][col])  # оставляем значения пикселей, если маска скраю
+
+            else:
+                cheksum = 0
+                for mask_row in range(
+                        mask_y):  # проверяем условие: если пиксели изображения, попадающие в маску соответственно
+                    for mask_col in range(
+                            mask_x):  # равны пикселям маски, то оставляем значение центрального пикселя, иначе - 0
+                        if matrix_pixels[(row - (mask_y // 2) + mask_row), (col - (mask_x // 2) + mask_col)] != \
+                                er_mask[mask_row][mask_col]:
+                            cheksum += 1
+
+                if cheksum == 0:
+                    new_row.append(matrix_pixels[row][col])
+                else:
+                    new_row.append(0)
+
+        new_matrix.append(new_row)
+
+    new_w, new_h = len(new_matrix[0]), len(new_matrix)
+    new_matrix = np.array(new_matrix).reshape(new_h, new_w)
+
+    return new_matrix
+
+
+def dilatation(image, mask_x, mask_y):
+    er_mask = np.full((mask_y, mask_x), 255)
+
+    width, height = image.size[0], image.size[1]  # Ширина и высота изображения
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    new_matrix = []
+    for row in range(height):
+        new_row = []
+        for col in range(width):
+            if (row < (mask_y // 2)) or (row >= height - (mask_y // 2)) or (col < (mask_x // 2)) or (
+                    col >= width - (mask_x // 2)):
+                new_row.append(matrix_pixels[row][col])  # оставляем значения пикселей, если маска скраю
+
+            else:
+                cheksum = 0
+                for mask_row in range(
+                        mask_y):  # проверяем условие: если пиксели изображения, попадающие в маску соответственно
+                    for mask_col in range(
+                            mask_x):  # равны пикселям маски, то оставляем значение центрального пикселя, иначе - 0
+                        if matrix_pixels[(row - (mask_y // 2) + mask_row), (col - (mask_x // 2) + mask_col)] != \
+                                er_mask[mask_row][mask_col]:
+                            cheksum += 1
+
+                if cheksum == mask_y * mask_x:
+                    new_row.append(0)
+                else:
+                    new_row.append(255)
+
+        new_matrix.append(new_row)
+
+    new_w, new_h = len(new_matrix[0]), len(new_matrix)
+    new_matrix = np.array(new_matrix).reshape(new_h, new_w)
+
+    return new_matrix

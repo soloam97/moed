@@ -4,6 +4,7 @@ import soundfile as sf
 import sounddevice as sd
 import wavio
 from PIL import *
+import cv2
 
 
 # -----------------------------------------
@@ -55,6 +56,7 @@ def trends():
 # -----------------------------------------
 # График случайной последовательности значений (встроенный генератор)
 # -----------------------------------------
+
 
 def task_rand_stand():
     N, s = 1000, 10
@@ -632,8 +634,8 @@ def task_antitrend():
 # -----------------------------------------
 
 def task_open_reader():
-    # y = open_reader("C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat")
-    y = open_reader("C:/Users/soloa/OneDrive/Документы/MATLAB/matrica.dat")
+    # y = open_reader('C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat', 'f')
+    y = open_reader('C:/Users/soloa/OneDrive/Документы/MATLAB/matrica.dat', 'f')
 
     N = len(y)
     x = np.arange(N)
@@ -875,7 +877,7 @@ def task_low_pass_filter():
 # -----------------------------------------------------
 
 def task_open_file_convolution():
-    input_mass = open_reader("C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat")
+    input_mass = open_reader('C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat', 'f')
 
     N = len(input_mass)
     x = np.arange(N)
@@ -980,7 +982,7 @@ def task_filters():
 
 def task_open_file_filter():
     # считывание файла для его обработки, N - длина массива из файла
-    input_mass_y = open_reader("C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat")  # Частоты 5, 55, 250
+    input_mass_y = open_reader('C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat', 'f')  # Частоты 5, 55, 250
     N = len(input_mass_y)
     input_mass_x = np.arange(N)
     # Делаем преобразование Фурье для входного массива
@@ -1027,7 +1029,7 @@ def task_open_file_filter():
 
 # Применение фильтра высоких частот
 def task_file_convolution_hpf():
-    input_mass = open_reader("C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat")  # Частоты 5, 55, 250
+    input_mass = open_reader('C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat', 'f')  # Частоты 5, 55, 250
 
     N = len(input_mass)
     x = np.arange(N)
@@ -1076,7 +1078,7 @@ def task_file_convolution_hpf():
 
 # Применение полосового фильтра bpf
 def task_file_convolution_bpf():
-    input_mass = open_reader("C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat")  # Частоты 5, 55, 250
+    input_mass = open_reader('C:/Users/soloa/PycharmProjects/univer1/2/pgp_f4-1K-1ms.dat', 'f')  # Частоты 5, 55, 250
 
     N = len(input_mass)
     x = np.arange(N)
@@ -1125,7 +1127,7 @@ def task_file_convolution_bpf():
 
 # Применение режекторного фильтра bsf
 def task_file_convolution_bsf():
-    input_mass = open_reader("pgp_f4-1K-1ms.dat")  # Частоты 5, 55, 250
+    input_mass = open_reader('pgp_f4-1K-1ms.dat', 'f')  # Частоты 5, 55, 250
 
     N = len(input_mass)
     x = np.arange(N)
@@ -1270,7 +1272,7 @@ def task_exam():
     # Открыть файл и отобразить данные
     # проанализировать файл, на налоичие составляющих тренд, шум, тренд, определить амплитуды и частоты гармоники в районе 70 Гц
 
-    input_mass = open_reader("v1x2.dat")  # Открытие файла
+    input_mass = open_reader('v1x2.dat', 'f')  # Открытие файла
     N = len(input_mass)  # Количество элементов входного массива
     x_input_mass = np.arange(N)
     print(N)
@@ -1494,6 +1496,8 @@ def task_deconvolution_of_ecg():
     plt.show()
 
 
+# ----------------------------------------------------------------------------------------------------
+# Мастшибирование изображения
 def task_scaling_image_1():
     # метод ближайшего соседа
 
@@ -1521,175 +1525,106 @@ def task_scaling_image_2():
     image_resized_1.show()
 
 
+# ----------------------------------------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------------------------------------
+# Отображение изображения в негативе
 def task_negative_image():
-    # mode = int(input('mode:'))  # Считываем номер преобразования.
-    image = read_jpg_gray('image1.jpg')  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
+    '''
+    Считываем изображение с помощью read_jpg_gray()
+    Сохраняем в двумерную numpy матрицу
+    Делаем норировку матрицы
+    Делаем преобразование всех пикселей 255-pix[i]
+    Выводим изображение
+    :return:
+    '''
+    file_names = ['image_contrast/image1.jpg', 'image_contrast/image2.jpg']  # Список названий изображений
+    for file_name in file_names:
+        image = read_jpg_gray(file_name)  # Открываем изображение
+        image.show()
+        width, height = image.size[0], image.size[1]  # Количество столбцов и строк матрицы пикселей
+        matrix_pixels = np.array(image).reshape(height, width)  # Сохраняем значения пикселей как numpy массив
+        a = np.array(range(width * height)).reshape((height, width))
 
-    # pixels = []
-    # for i in range(width):
-    #     for j in range(height):
-    #         pixels.append(pix[i, j])
-    # L_max = max(pixels)
-    #
-    # new_width, new_height = width, height
-    # new_image = Image.new('L', (new_width, new_height))
-    for x in range(width):
-        for y in range(height):
-            r = pix[x, y]
-            draw.point((x, y), (255 - r))
-    image.save("result1.1.jpg", "JPEG")  # сохранить изображение
-    image.show()
+        # Вызов функции для негатива
+        negative_pixels = negative_matrix_pix(matrix_pixels)
 
-    image = read_jpg_gray('image2.jpg')  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
-
-    for x in range(width):
-        for y in range(height):
-            r = pix[x, y]
-            draw.point((x, y), (255 - r))
-    image.save("result2.1.jpg", "JPEG")  # сохранить изображение
-    image.show()
-
-    image = read_jpg_gray('image3.jpg')  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
-
-    for x in range(width):
-        for y in range(height):
-            r = pix[x, y]
-            draw.point((x, y), (255 - r))
-    image.save("result3.1.jpg", "JPEG")  # сохранить изображение
-    image.show()
+        # Отображение numpy массива в массив pil
+        # image_negative = Image.fromarray(negative_pixels)  # В качестве аргумента numpy массив
+        image_negative = drawing_image_new(negative_pixels, width, height)
+        image_negative.show()
 
 
+# Гамма коррекция изображения
 def task_gamma_corrextion():
-    # mode = int(input('mode:'))  # Считываем номер преобразования.
-    image = read_jpg_gray('image1.jpg')  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
-    const = 7
-    gamma = 0.7
-    for x in range(width):
-        for y in range(height):
-            r = pix[x, y]
-            draw.point((x, y), (math.ceil(const * (r ** gamma))))
-    image.save("result1.2.jpg", "JPEG")  # сохранить изображение
-    image.show()
+    file_names = ['image_contrast/image1.jpg', 'image_contrast/image2.jpg']  # Список названий изображений
+    for file_name in file_names:
+        image = read_jpg_gray(file_name)  # Открываем изображение
+        image.show()
+        width, height = image.size[0], image.size[1]  # Количество столбцов и строк матрицы пикселей
+        matrix_pixels = np.array(image).reshape(height, width)  # Сохраняем значения пикселей как numpy массив
 
-    image = read_jpg_gray('image2.jpg')  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
-    const = 7
-    gamma = 0.7
-    for x in range(width):
-        for y in range(height):
-            r = pix[x, y]
-            draw.point((x, y), (math.ceil(const * (r ** gamma))))
-    image.save("result2.2.jpg", "JPEG")  # сохранить изображение
-    image.show()
+        # Вызов функции для негатива
+        const, gamma = 7, 0.8
+        gamma_corr_pixels = gamma_correction(matrix_pixels, const, gamma)
 
-    image = read_jpg_gray('image3.jpg')  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
-    const = 7
-    gamma = 0.7
-    for x in range(width):
-        for y in range(height):
-            r = pix[x, y]
-            draw.point((x, y), (math.ceil(const * (r ** gamma))))
-    image.save("result3.2.jpg", "JPEG")  # сохранить изображение
-    image.show()
+        # Отображение numpy массива в массив pil
+        # image_gamma = Image.fromarray(gamma_corr_pixels)
+        image_gamma = drawing_image_new(gamma_corr_pixels, width, height)
+        image_gamma.show()
 
 
+# Логарифмическая коррекция изображения
 def task_log_corrextion():
-    # mode = int(input('mode:'))  # Считываем номер преобразования.
-    image = read_jpg_gray('image1.jpg')  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
-    const = 20
-    for x in range(width):
-        for y in range(height):
-            r = pix[x, y]
-            draw.point((x, y), (math.ceil(const * log2(r + 1))))
-    image.save("result1.3.jpg", "JPEG")  # сохранить изображение
-    image.show()
+    file_names = ['image_contrast/image1.jpg', 'image_contrast/image2.jpg']  # Список названий изображений
+    for file_name in file_names:
+        image = read_jpg_gray(file_name)  # Открываем изображение
+        image.show()
+        width, height = image.size[0], image.size[1]  # Количество столбцов и строк матрицы пикселей
+        matrix_pixels = np.array(image).reshape(height, width)  # Сохраняем значения пикселей как numpy массив
 
-    image = read_jpg_gray('image2.jpg')  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
-    const = 20
-    for x in range(width):
-        for y in range(height):
-            r = pix[x, y]
-            draw.point((x, y), (math.ceil(const * log2(r + 1))))
-    image.save("result2.3.jpg", "JPEG")  # сохранить изображение
-    image.show()
+        # Вызов функции для негатива
+        const = 50
+        log_corr_pixels = log_correction(matrix_pixels, const)
 
-    image = read_jpg_gray('image3.jpg')  # Открываем изображение.
-    draw = ImageDraw.Draw(image)  # Создаем инструмент для рисования.
-    width = image.size[0]  # Определяем ширину.
-    height = image.size[1]  # Определяем высоту.
-    pix = image.load()  # Выгружаем значения пикселей.
-    const = 20
-    for x in range(width):
-        for y in range(height):
-            r = pix[x, y]
-            draw.point((x, y), (math.ceil(const * log2(r + 1))))
-    image.save("result3.3.jpg", "JPEG")  # сохранить изображение
-    image.show()
+        # Отображение numpy массива в массив pil
+        # image_log = Image.fromarray(log_corr_pixels)
+        image_log = drawing_image_new(log_corr_pixels, width, height)
+        image_log.show()
 
 
+# ----------------------------------------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------------------------------------
+# Эквализация изображения - автоматическая настройка яркости
 def task_equalization():
     # Считываем  файл
-    image = read_jpg_gray('HollywoodLC.jpg')
-    w, h = image.size[0], image.size[1]
-    pix = image.load()
-    # Строим гистограмму
-    x, y, pixels_1d = image_histogram(image)
+    image = read_jpg_gray('image_contrast/HollywoodLC.jpg')
+    # image = read_jpg_gray('image_contrast/image2.jpg')
+
+    image.show()
+    x, y, pix = image_histogram(image)
+
     plt.plot(x, y)
     plt.show()
 
-    # Производим интегрирование
-    cdf = [0]
-    for i in range(1, len(y)):
-        cdf.append(cdf[i - 1] + ((y[i - 1] + y[i]) * 0.5))
-    max_cdf = max(cdf)
-    for i in range(255):
-        cdf[i] /= max_cdf
+    image_new = equalization(image)
+    image_new.show()
 
-    plt.plot(x, cdf)
+    x_new, y_new, pix_new = image_histogram(image_new)
+
+    plt.plot(x_new, y_new)
     plt.show()
 
-    # new_image = drawing_image_new(pixels_1d, w, h)
-    # new_image.show()
-
-    for i in range(w * h):
-        for j in range(255):
-            if pixels_1d[i] == j:
-                pixels_1d[i] = cdf[j] * 255
-
-    new_image = drawing_image_new(pixels_1d, w, h)
-    new_image.save("HollywoodLC2.jpg", "JPEG")  # сохранить изображен
-    new_image.show()
+    # im = cv2.imread('image_contrast/HollywoodLC.jpg')
+    # # calculate mean value from RGB channels and flatten to 1D array
+    # vals = im.mean(axis=2).flatten()
+    # # plot histogram with 255 bins
+    # b, bins, patches = plt.hist(vals, 255)
+    # plt.xlim([0, 255])
+    # plt.show()
 
 
 # ---------------------------------------------------------------------------------------
@@ -1723,50 +1658,75 @@ def task_equalization():
 def task_read_xcr():
     # Считываем изображение
     image = open_reader_xcr('h400x300.xcr')
-    w, h = 300, 400
-    matrix_pix = np.array(image).reshape(w, h)
-    pix = from_2d_to_1d(matrix_pix, w, h)
+    width, height = 400, 300
+    matrix_pix = np.array(image).reshape(height, width)
 
-    # Создаем входное изображение 400x300 (поворот на 90 градусов)
-    input_image = drawing_image_new(pix, w, h).transpose(Image.ROTATE_90)
+    # Создаем входное изображение 400x300
+    input_image = drawing_image_new(matrix_pix, width, height)
+    input_image.save('moed_test.jpg')
     input_image.show()
 
-    derivative_mass = derivative(matrix_pix, w, h)
-    pix = from_2d_to_1d(derivative_mass, w, h - 1)
+    # Гистограмма для входного изображения
+    image_hist_x, image_hist_y, pixels_1d = image_histogram(input_image)
 
-    # Создаем изображение производной 400x300 (поворот на 90 градусов)
-    input_image = drawing_image_new(pix, w, h - 1).transpose(Image.ROTATE_90)
+    plt.plot(image_hist_x, image_hist_y)
+    plt.title('Гистограмма input_image')
+    # plt.savefig('moed2.jpg')
+    plt.show()
+
+    derivative_mass = derivative(matrix_pix, width, height)
+    # pix = from_2d_to_1d(derivative_mass, width, height - 1)
+
+    # Создаем изображение производной 400x300
+    input_image = drawing_image_new(derivative_mass, width - 1, height)
+    # input_image.save('moed3.jpg')
     input_image.show()
-
 
     # Создаем спектр для производной
-    spectrum = ampl_spectr(derivative_mass[0], h - 1)
-    spectrum_x = range(h - 1)
-    plt.plot(spectrum_x, spectrum)
+    spectrum = ampl_spectr(derivative_mass[0], width - 1)
+    # spectrum_x = range((width - 1))
+
+    spectrum_x = np.linspace(0, 1, (width - 1))
+
+    len_spectr = (width - 1) // 2
+
+    plt.plot(spectrum_x[:len_spectr], spectrum[:len_spectr])
     plt.title('Спектр')
     plt.xlabel('Пискель')
     plt.ylabel('Яркость')
+    # plt.savefig('moed4.jpg')
     plt.show()
 
-    fs = 400
-    dt = 1 / fs
-    m, fc1, fc2 = 64, 100, 130
+    max_spectr = max(spectrum)
+    for i in range(len_spectr):
+        if spectrum[i] == max_spectr:
+            fc = i
+            break
+
+    # Организуем режекторный фильтр
+    fs = width
+    dx = 1 / fs
+    m, fc1, fc2 = 32, fc - 15, fc + 15
     input_mass = matrix_pix
-    control_mass = bend_stop_filter(m, dt, fc1, fc2)
+    control_mass = bend_stop_filter(m, dx, fc1, fc2)
 
-    conv_matrix_pix = image_conv(input_mass, control_mass, w, h, m)
-    conv_pix = from_2d_to_1d(conv_matrix_pix, w, h)
+    conv_matrix_pix = image_conv(input_mass, control_mass, width - 1, height, m)
 
-    # Создаем изображение 400x300 (поворот на 90 градусов)
-    conv_image = drawing_image_new(conv_pix, w, h).transpose(Image.ROTATE_90)
+    # Создаем изображение 400x300
+    conv_image = drawing_image_new(conv_matrix_pix, width - 1, height)
+    # conv_image.save('moed5.jpg')
     conv_image.show()
 
     # Создаем АКФ для производной
-    w_acf = h - 1
+    w_acf = width - 1
     acf_of_derivative = acf(derivative_mass[0], w_acf)
     # Считаем спектр АКФ для производной
-    mass_x = range(w_acf)
+    # mass_x = range(w_acf)
+
+    mass_x = np.linspace(0, 1, (width - 1))
+
     spectr_acf_of_derivative = ampl_spectr(acf_of_derivative, w_acf)
+    # mass_x = normalization(mass_x, dim=1, N=0.5)
 
     fig = plt.figure()
     plt.subplot(1, 2, 1)
@@ -1776,97 +1736,839 @@ def task_read_xcr():
     plt.subplot(1, 2, 2)
     plt.plot(mass_x[:(w_acf // 2)], spectr_acf_of_derivative[:(w_acf // 2)])  # График спектра АКФ производной
     plt.title('Спектр АКФ производной')
+    # plt.savefig('moed6.jpg')
     plt.show()
 
-    # Создаем ВКФ для производной
-    w_mcf = w_acf
-    mass1_for_mcf = derivative_mass[0]
-    mass2_for_mcf = derivative_mass[1]
-    mcf_of_derivative = mcf(mass1_for_mcf, mass2_for_mcf, w_mcf)
-    # Считаем сектр ВКФ для производной
-    spectr_mcf_of_derivative = ampl_spectr(mcf_of_derivative, w_mcf)
-
-    fig = plt.figure()
-    plt.subplot(1, 2, 1)
-    plt.plot(mass_x, mcf_of_derivative)
-    plt.title('График ВКФ производной')
-
-    plt.subplot(1, 2, 2)
-    plt.plot(mass_x[:(w_mcf // 2)], spectr_mcf_of_derivative[:(w_mcf // 2)])
-    plt.title('Спектр ВКФ производной')
-    plt.show()
-
+    #
+    # # Создаем ВКФ для производной
+    # w_mcf = w_acf
+    # mass1_for_mcf = derivative_mass[0]
+    # mass2_for_mcf = derivative_mass[1]
+    # mcf_of_derivative = mcf(mass1_for_mcf, mass2_for_mcf, w_mcf)
+    # # Считаем сектр ВКФ для производной
+    # spectr_mcf_of_derivative = ampl_spectr(mcf_of_derivative, w_mcf)
+    #
+    # fig = plt.figure()
+    # plt.subplot(1, 2, 1)
+    # plt.plot(mass_x, mcf_of_derivative)
+    # plt.title('График ВКФ производной')
+    #
+    # plt.subplot(1, 2, 2)
+    # plt.plot(mass_x[:(w_mcf // 2)], spectr_mcf_of_derivative[:(w_mcf // 2)])
+    # plt.title('Спектр ВКФ производной')
+    # # plt.savefig('moed7.jpg')
+    # plt.show()
+    #
     image_equal = equalization(conv_image)
     image_equal.show()
 
 
-def task_adding_noise():
+# ----------------------------------------------------------------------------------------------------
+# Фильтрация изображения с помощью фильтра низких частот
+'''
+Подавить 3 вида аддитивных шумов уровня 1%, 5%, 15%
+1) Нормально распределенные шумы
+2) Биполярные шумы "соль и перец"
+3) Сумма первых двух
+  на модельном изображении model.jpg с помощью фильтра низких частот
+  Частоты среза задаются в нормированной шкале Найквиста от 0 до 0.5, параметр m
+  подобрать самостоятельно до лучшего результата
+  
+  1. Считываем матрицу пикселей входного изображения
+  2. Строим гистограмму входного изображения
+  3. Добавляем модельный шум в матрицу изображения 1%, 5%, 15%
+  4. Строим Гистограмму для зашумленных изображений
+  5. Считаем спектры зашумленных изображений
+  6. Реализуем фильтр низких частот
+  7. Производим фильтрацию
+  8. Визуализируем гистограммы и спектр отфильтрованных изображений
+'''
+
+
+# ----------------------------------------------------------------------------------------------------
+def task_add_model_noise():
     # Загружаем картинку
-    file = 'MODEL.jpg'
+    file = 'image_model_noise/MODEL.jpg'  # Входное модельное изображение
     image = read_jpg_gray(file)
-    w, h = image.size[0], image.size[1]
+    width, height = image.size[0], image.size[1]
     image.show()  # Выводим на экран входную картинку
 
     # гистограмма для входного изображения
     hist_image_x, hist_image_y, hist_image_pix = image_histogram(image)
 
-    # Добавление гауссовского шума
-    level = 1000
-    image_gauss_noise = add_gauss_noise(file, level)
-    image_gauss_noise.show()
-    image_gauss_noise.save('gauss_noise.jpg')
-    image_gauss_noise = read_jpg_gray('gauss_noise.jpg')
-
-    # гистограмма для зашумленного изображения
-    hist_gauss_x, hist_gauss_y, hist_gauss_pix = image_histogram(image_gauss_noise)
-
-    fig = plt.figure()
-
-    plt.subplot(1, 2, 1)
-    plt.plot(hist_image_x, hist_image_y)
-
-    plt.subplot(1, 2, 2)
-    plt.plot(hist_gauss_x, hist_gauss_y)
-
+    plt.bar(hist_image_x, hist_image_y)
     plt.show()
 
-    # Добавление импульсного шума
-    image_impulse_noise = add_impulse_noise(file)
-    image_impulse_noise.show()
+    # Добавление шума
+    types_of_noise = ['gauss', 'impulse', 'gauss + impulse']
+    percent_noise = [1, 5, 15]
 
-    # зашумление изображения гауссовским шумом + "соль и перец"
-    image_gauss_impulse_noise = add_impulse_noise(image_gauss_noise)
-    image_gauss_impulse_noise.show()
+    for type_of_noise in types_of_noise:
+        for percent in percent_noise:
+            if type_of_noise == 'gauss':
+                mu, level = 10, percent
+                image_noised = add_gauss_noise(file, mu, level)
+            elif types_of_noise == 'impulse':
+                Pa, Pb = percent / 200, percent / 200
+                image_noised = add_impulse_noise(file, Pa, Pb)
+            else:
+                mu, level = 10, percent
+                Pa, Pb = percent / 200, percent / 200
+                image_noised = add_gauss_noise(file, mu, level)
+                image_noised = add_impulse_noise(image_noised, Pa, Pb)
 
-    pixels = image_impulse_noise.load()
-    pix = []
-    for i in range(w):
-        for j in range(h):
-            pix.append(pixels[i, j])
-    matrix_pix = np.array(pix).reshape(w, h)
+            image_noised.show()
 
-    # Создаем спектр для производной
-    spectrum = ampl_spectr(matrix_pix[100], h)
-    spectrum_x = range(h)
-    plt.plot(spectrum_x, spectrum)
-    plt.title('Спектр')
-    plt.xlabel('Пискель')
-    plt.ylabel('Яркость')
+            # Строим гистограмму для зашумленного изображения
+            hist_image_noised_x, hist_image_noised_y, pix_noised = image_histogram(image_noised)
+
+            plt.bar(hist_image_noised_x, hist_image_noised_y)
+            plt.title(f'Гистограмма зашумленного изображения {percent}%')
+            plt.xlabel(f'{type_of_noise}')
+            plt.show()
+
+            # Считаем спектр зашумленного сигнала
+            noised_pixels = np.array(image_noised).reshape(height, width)
+
+            image_noised_spectrum = ampl_spectr(noised_pixels[100], width)
+
+            plt.plot(image_noised_spectrum[:width // 2])
+            plt.title(f'Спектр зашумленного изображения {percent}%')
+            plt.xlabel(f'{type_of_noise}')
+            plt.show()
+
+            # Считаем АКФ зашумленного изображения
+            acf_image_noised = acf(image_noised_spectrum, width)
+            spectrum_acf_image_noised = ampl_spectr(acf_image_noised, width)
+
+            plt.subplot(1, 2, 1)
+            plt.plot(acf_image_noised[:width // 2])
+            plt.title(f'АКФ зашумленного изображения {percent}%')
+            plt.xlabel(f'{type_of_noise}')
+
+            plt.subplot(1, 2, 2)
+            plt.plot(spectrum_acf_image_noised[:width // 2])
+            plt.xlabel(f'{type_of_noise}')
+
+            plt.show()
+
+            fs = width
+            m = 32
+            dx = 1 / fs
+            fc = 20
+            input_mass = noised_pixels
+            control_mass = low_pass_filter(m, dx, fc)
+            conv_matrix = image_conv(input_mass, control_mass, width, height, m)
+
+            conv_image = drawing_image_new(conv_matrix, width, height)
+            conv_image.show()
+
+            hist_image_filt_x, hist_image_filt_y, filt_pix = image_histogram(conv_image)
+
+            plt.bar(hist_image_filt_x, hist_image_filt_y)
+            plt.title(f'Гистограмма отфильтрованного изображения {percent}%')
+            plt.xlabel(f'{type_of_noise}')
+            plt.show()
+
+
+# -----------------------------------------------------------------------------------------------
+
+# Реализация пространственного фильтра среднего
+'''
+Подавить 3 аддитивных шума уровня 1%, 5%, 15%
+  1) случайные шумы
+  2) биполярные шумы
+  3) сумма первых двух
+на модельном изображении model.jpg пространственными фильтрами с возможностью
+изменения размера масок:
+  а) усредняющий арифметический фильтр (*адаптивный)
+  б) медианный (*адаптивный)
+  *- опционно повышенной трудности
+'''
+
+
+# -----------------------------------------------------------------------------------------------
+def task_spatial_filter_average():
+    pref = 'image_model_noise/'
+    files = ['gauss_1.jpg', 'gauss_5.jpg', 'gauss_15.jpg', 'impulse_1.jpg', 'impulse_5.jpg', 'impulse_15.jpg',
+             'gauss_impulse_1.jpg', 'gauss_impulse_5.jpg', 'gauss_impulse_15.jpg']
+    for i in range(len(files)):
+        files[i] = f'{pref}{files[i]}'
+    mask_sizes = [3, 5]
+    for file in files:
+        image = read_jpg_gray(file)
+        image.show()
+
+        # Гистограмма входного зашумленного изображения
+        image_hist_x, image_hist_y, pixels_1d = image_histogram(image)
+
+        for mask_size in mask_sizes:
+            image_new = spatial_filter_average(image, mask_size)
+            image_new.show()
+            # image_new.save(f'aver_mask_{mask_size}_{file}')
+
+            # Гистограмма отфильтрованного изображения
+            image_new_hist_x, image_new_hist_y, pixels_new_1d = image_histogram(image_new)
+
+            fig = plt.figure('Гистограмма зашумленного и отфильтрованного изображений')
+            plt.subplot(121)
+            plt.bar(image_hist_x, image_hist_y)
+            plt.title('Hist of noise image')
+            plt.xlabel(f'{file}')
+
+            plt.subplot(122)
+            plt.bar(image_new_hist_x, image_new_hist_y)
+            plt.title('Hist of filtered image')
+            plt.xlabel(f'filtered {file}')
+
+            plt.tight_layout()
+            plt.show()
+
+
+# -----------------------------------------------------------------------------------------------------
+
+# Реализация пространственного медианного фильтра
+
+# -----------------------------------------------------------------------------------------------------
+
+def task_spatial_filter_median():
+    pref = 'image_model_noise/'
+    files = ['gauss_1.jpg', 'gauss_5.jpg', 'gauss_15.jpg', 'impulse_1.jpg', 'impulse_5.jpg', 'impulse_15.jpg',
+             'gauss_impulse_1.jpg', 'gauss_impulse_5.jpg', 'gauss_impulse_15.jpg']
+    for i in range(len(files)):
+        files[i] = f'{pref}{files[i]}'
+    mask_sizes = [3, 5]
+    for file in files:
+        image = read_jpg_gray(file)
+        image.show()
+
+        # Гистограмма входного зашумленного изображения
+        image_hist_x, image_hist_y, pixels_1d = image_histogram(image)
+
+        for mask_size in mask_sizes:
+            image_new = spatial_filter_median(image, mask_size)
+            image_new.show()
+            # image_new.save(f'med_mask_{mask_size}_{file}')
+
+            # Гистограмма отфильтрованного изображения
+            image_new_hist_x, image_new_hist_y, pixels_new_1d = image_histogram(image_new)
+
+            fig = plt.figure('Гистограмма зашумленного и отфильтрованного изображений')
+            plt.subplot(121)
+            plt.bar(image_hist_x, image_hist_y)
+            plt.title('Hist of noise image')
+            plt.xlabel(f'{file}')
+
+            plt.subplot(122)
+            plt.bar(image_new_hist_x, image_new_hist_y)
+            plt.title('Hist of filtered image')
+            plt.xlabel(f'filtered {file}')
+
+            plt.tight_layout()
+            plt.show()
+
+
+# -----------------------------------------------------------------------------------------------------
+# Реализация деконволюции изображения
+'''
+    1) Считываем dat файл изображения
+    2) Считываем dat файл с ядром функции
+    3) Выводим изображение
+    4) Дополняем нулями функицю ядра
+    5) Построчно производим Фурье преобразование изображения
+    6) Производим преобразование Фурье функции ядра
+    7) Считаем действительные и мнимые части функции ядра и каждой строки изображения
+    8) Производим построчно комплексное деление изображения и функции ядра
+    9) Считаем модули
+    9) Берем обратное преобразование Фурье и получаем отфильтрованное изображение от размытия
+'''
+
+
+# -----------------------------------------------------------------------------------------------------
+
+def task_image_deconvolution():
+    file_name_1 = 'data_deconvolution/blur307x221D.dat'  # Изображение без шумов
+    file_name_2 = 'data_deconvolution/blur307x221D_N.dat'  # Изображение с шумами
+    file_name_3 = 'data_deconvolution/kernD76_f4.dat'  # Массив значений ядра смазывающей функции
+
+    data = open_reader(file_name_2, 'f')  # считываем данные из файла изображения и сохраняем в массив
+    function_core = open_reader(file_name_3,
+                                'f')  # считываем данные из файла ядра смазывающей функции и сохраняем в массив
+
+    length_core = len(function_core)  # Длина ядра смазывающей функции
+    print(len(data))
+
+    width, height = 307, 221
+    for i in range(width - length_core):
+        function_core.append(0)
+    print(len(function_core))
+
+    matrix_pix = np.array(data).reshape(height, width)
+    pix = from_2d_to_1d(matrix_pix, height, width)
+
+    plt.imshow(matrix_pix, cmap='gist_gray', origin='lower')
     plt.show()
+
+    # Применим деконволюцию
+    # deconv_matrix_pix = image_deconvolution(matrix_pix, function_core)
+
+    k = 15  # Для изображения с шумами
+    # k = 0.0005  # Для изображения без  шумов
+    deconv_matrix_pix = optimal_image_deconvolution(matrix_pix, function_core, k)
+
+    # Вывод отфильтрованного изображения
+    plt.imshow(deconv_matrix_pix, cmap='gist_gray', origin='lower')
+    plt.title(f'Отфильтрованное изображение {k}')
+    plt.show()
+
+
+# -----------------------------------------------------------------------------------------------------
+# Релизация выделения контуров объекта
+'''
+Сегментировать контуры объектов в изображении model.jpg без шумов и с шумами 15% двумя способами:
+    1) ФНЧ
+    2) ФВЧ
+В обоих случаях можно применять пороговые преобразования и арифметические операции с изображениями.
+Обосновать последовательность применения всех преобразований и их параметры
+Оценить результаты
+1) пороговое преобразование, получаем бинарное изображение (можно выбрать два порога или один)
+2) Бинарное изображение ФНЧ с правильным параметром (он немного размажет края)
+3) Вычесть это изображение и изображение с пороговым преобразованием (остануться только размытые контуры
+они будут довольно толстые, но зато будут без разрывов
+4*) пороговое преобразование (останется объект с толстым контуром и шум)
+*5) Медианный фильтр
+для ФВЧ
+Высокие частоты - мелкие объекты
+контур - резкий переход (пиксели фона, скачок в пару пикселей и затем объект)
+фильтрация - после порогового преобразования
+'''
+
+
+# -----------------------------------------------------------------------------------------------------
+def task_contour_segmentation():
+    pref = 'image_model_noise/'
+    # files = ['MODEL.jpg', 'gauss_5.jpg', 'impulse_5.jpg', 'gauss_impulse_5.jpg']
+    # files = ['MODEL.jpg']
+    files = ['impulse_5.jpg']
+
+    for i in range(len(files)):
+        files[i] = f'{pref}{files[i]}'
+
+    for file in files:
+        # Считываем матрицу пикселей изображения
+        image = read_jpg_gray(file)
+        image.show()
+        width, height = image.size[0], image.size[1]
+        matrix_pixels = np.array(image).reshape(height, width)
+
+        # Произодим пороговую фильтрацию
+        count = 0
+        for row in range(height):
+            for col in range(width):
+                if matrix_pixels[row][col] < 200:
+                    matrix_pixels[row][col] = 0
+                else:
+                    matrix_pixels[row][col] = 255
+                    count += 1
+
+        # Рисуем изображение после порогового преобразования
+        image_new = drawing_image_new(matrix_pixels, width, height)
+        image_new.show()
+
+        #  Гистограмма порогового изображения
+        hist_image_new_x, hist_image_new_y, pix_new = image_histogram(image_new)
+        print(hist_image_new_y[255])
+
+        plt.bar(hist_image_new_x, hist_image_new_y)
+        plt.title(f'Гистограмма  {file}')
+        plt.show()
+
+        # --------------------------------------------------------------- потом удалить
+        spectr = ampl_spectr(matrix_pixels[100], width)
+        plt.plot(spectr[:width // 2])
+        plt.show()
+
+        acf_f = acf(matrix_pixels[100], width)
+        spectr_acf = ampl_spectr(acf_f, width)
+
+        plt.plot(spectr_acf[:width // 2])
+        plt.title('ACF')
+        plt.show()
+
+        # --------------------------------------------------------------- до этого места
+
+        # Фильтр низких частот для порогового изображения, чтобы размыть изображение
+        m, dx = 64, 1 / width
+        if file == f'{pref}MODEL.jpg':
+            fc = 15  # Чем меньше fc, тем больше размытие контуров, в итоге шире контуры для без шумов
+            porog = 50
+        elif file == f'{pref}impulse_5.jpg':
+            fc = 10  # Для импульсного
+            porog = 50
+        elif file == f'{pref}gauss_5.jpg':
+            fc = 10  # Для импульсного
+            porog = 50
+        elif file == f'{pref}gauss_impulse_5.jpg':
+            fc = 20  # Для импульсного
+            porog = 30
+
+        control_mass = low_pass_filter(m, dx, fc)  # Веса фильтра низких частот
+        conv_mass = image_conv(matrix_pixels, control_mass, width, height, m)  # размытое изображение
+
+        image_convol = drawing_image_new(conv_mass, width, height)
+        image_convol.show()
+
+        # Теперь попробуем вычесть из размытого бинарное изображение, чтобы получить контуры
+        matrix_pixels_1 = conv_mass - matrix_pixels
+        filt_image = drawing_image_new(matrix_pixels_1, width, height)
+        filt_image.show()
+
+        # Гистограмма Разницы изображений
+        hist_image_new_x, hist_image_new_y, pix_new = image_histogram(filt_image)
+        plt.plot(hist_image_new_x, hist_image_new_y)
+        plt.title(f'Гистограмма  {file}')
+        plt.show()
+
+        # Произодим пороговую фильтрацию для четких контуров
+        for row in range(height):
+            for col in range(width):
+                if matrix_pixels_1[row][col] > porog:
+                    matrix_pixels_1[row][col] = 255
+                else:
+                    matrix_pixels_1[row][col] = 0
+
+        matrix_pixels_1 = np.array(matrix_pixels_1).reshape(height, width)
+        contour_image = drawing_image_new(matrix_pixels_1, width, height)
+        contour_image.show()
+
+        # Фильтруем изображения медианным фильтром
+        if file == f'{pref}impulse_5.jpg' or file == f'{pref}gauss_impulse_5.jpg':
+            matrix_pixels_1 = spatial_filter_median(contour_image, 3)
+            matrix_pixels_1 = np.array(matrix_pixels_1).reshape(height, width)
+            contour_image = drawing_image_new(matrix_pixels_1, width, height)
+            contour_image.show()
+
+
+# -----------------------------------------------------------------------------------------------------
+'''
+1) Считываем изображение
+2) Гистограмма изображения
+3) Пороговое преобразование
+4) Считаем градиент бинарного изображения
+5) выводим модуль градиента бинарного изображения
+'''
+
+
+# Сегментация изображения с помощью градианта
+def task_segmentation_gradient():
+    # files = ['MODEL.jpg', 'gauss_15.jpg', 'impulse_15.jpg', 'gauss_impulse_15.jpg']
+    file = 'image_model_noise/gauss_impulse_5.jpg'
+
+    # Считываем изображение
+    image = read_jpg_gray(file)
+    width, height = image.size[0], image.size[1]
+    image.show()
+
+    # Используем медианный фильтр
+    image = spatial_filter_median(image, 5)
+    image.show()
+    # image.save(f'image_contours/gauss_med_filt.jpg')
+    # image.save(f'image_contours/gauss_impulse_med_filt.jpg')
+
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    # Гистограмма входного изображения
+    hist_image_x, hist_image_y, image_pix = image_histogram(image)
+
+    plt.bar(hist_image_x, hist_image_y)
+    plt.title(f'Гистограмма Изображения с шумом')
+    # plt.savefig(f'image_contours/model_hist.jpg')
+    # plt.savefig(f'image_contours/gauss_hist.jpg')
+    # plt.savefig(f'image_contours/gauss_impulse_hist.jpg')
+    plt.show()
+
+    # Произодим пороговую фильтрацию
+    for row in range(height):
+        for col in range(width):
+            if 190 < matrix_pixels[row][col] < 250:
+                matrix_pixels[row][col] = 255
+            else:
+                matrix_pixels[row][col] = 0
+
+    image_bin = drawing_image_new(matrix_pixels, width, height)
+    image_bin.show()
+    # image_bin.save(f'image_contours/gauss_bin.jpg')
+    # image_bin.save(f'image_contours/gauss_impulse_bin.jpg')
+
+    # Считаем модуль градиента изображения
+    gradient_matrix_x = gradient(matrix_pixels, 'row')
+    image_new = drawing_image_new(gradient_matrix_x, width - 1, height)
+    image_new.show()
+    # image_new.save(f'image_contours/gauss_bin_grad_x.jpg')
+    # image_new.save(f'image_contours/gauss_impulse_bin_grad_x.jpg')
+
+    gradient_matrix_y = gradient(matrix_pixels, 'column')
+    image_new = drawing_image_new(gradient_matrix_y, width, height - 1)
+    image_new.show()
+    # image_new.save(f'image_contours/gauss_bin_grad_y.jpg')
+    # image_new.save(f'image_contours/gauss_impulse_bin_grad_y.jpg')
+
+    gradient_matrix = []
+    for row in range(height - 1):
+        new_row = []
+        for col in range(width - 1):
+            new_row.append(sqrt(gradient_matrix_x[row][col] ** 2 + gradient_matrix_y[row][col] ** 2))
+        gradient_matrix.append(new_row)
+
+    gradient_matrix = np.array(gradient_matrix).reshape(height - 1, width - 1)
+
+    image_mod_grad = drawing_image_new(gradient_matrix, width - 1, height - 1)
+    image_mod_grad.show()
+    # image_mod_grad.save(f'image_contours/gauss_bin_grad_module.jpg')
+    # image_mod_grad.save(f'image_contours/gauss_impulse_bin_grad_module.jpg')
+
+    hist_x, hist_y, pix = image_histogram(image_mod_grad)
+
+    plt.plot(hist_x, hist_y)
+    plt.show()
+
+
+def task_segmentation_laplasian():
+    # files = ['MODEL.jpg', 'gauss_15.jpg', 'impulse_15.jpg', 'gauss_impulse_15.jpg']
+    file = 'image_model_noise/impulse_5.jpg'
+
+    # Считываем изображение
+    image = read_jpg_gray(file)
+    width, height = image.size[0], image.size[1]
+    image.show()
+    # image.save('image_contours/2input_image.jpg')
+
+    hist_image_x, hist_image_y, image_pix = image_histogram(image)
+
+    plt.bar(hist_image_x, hist_image_y)
+    plt.title(f'Гистограмма Входного')
+    plt.show()
+
+    matrix_pixels = np.array(image).reshape(height, width)
+    # Произодим пороговую фильтрацию
+    for row in range(height):
+        for col in range(width):
+            if 110 < matrix_pixels[row][col] < 210:
+                matrix_pixels[row][col] = 255
+            else:
+                matrix_pixels[row][col] = 0
+
+    drawing_image_new(matrix_pixels, width, height).show()
+
+    # Используем медианный фильтр
+    image = spatial_filter_median(image, 5)
+    image.show()
+    # image.save('image_contours/2filt_image.jpg')
+
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    # Гистограмма входного изображения
+    hist_image_x, hist_image_y, image_pix = image_histogram(image)
+
+    plt.bar(hist_image_x, hist_image_y)
+    plt.title(f'Гистограмма Изображения шумом')
+    plt.show()
+    # plt.savefig('image_contours/2hist.jpg')
+
+    # # Произодим пороговую фильтрацию
+    # for row in range(height):
+    #     for col in range(width):
+    #         if 100 < matrix_pixels[row][col] < 200:
+    #             matrix_pixels[row][col] = 255
+    #         else:
+    #             matrix_pixels[row][col] = 0
+
+    image_bin = drawing_image_new(matrix_pixels, width, height)
+    image_bin.show()
+    # image_bin.save('image_contours/2image_bin.jpg')
+
+    # Считаем лапласиан
+    matrix_bin = np.array(image_bin).reshape(height, width)
+    laplas_matrix = laplasian(matrix_bin)
+
+    image_laplas = drawing_image_new(laplas_matrix, width - 2, height - 2)
+    image_laplas.show()
+    # image_laplas.save('image_contours/2laplas.jpg')
+    # image_laplas.save('image_contours/lapl_gauss_15_cont.jpg')
+
+    matrix_pixels = np.array(image_laplas).reshape(height - 2, width - 2)
+
+    hist_x, hist_y, pix = image_histogram(image_laplas)
+
+    plt.plot(hist_x, hist_y)
+    plt.show()
+
+
+# ----------------------------------------------------------------------------------------------------
+# Реализация выделение контура с помощью эрозии
+'''
+1) считываем изображение (модельное и с шумом)
+2) производим бинаризацию изображения
+3) применяем эрозию к изображению
+4) вычитаем из бинарного изображения резильтат эрозии
+'''
+
+
+def task_erosion():
+    # files = ['MODEL.jpg', 'impulse_15.jpg']
+    # file = 'image_model_noise/impulse_5.jpg'
+    # file = 'image_model_noise/MODEL.jpg'
+    file = 'image_model_noise/impulse_5.jpg'
+    # file = 'image_model_noise/gauss_impulse_1.jpg'
+
+    # Считываем изображение
+    image = read_jpg_gray(file)
+    width, height = image.size[0], image.size[1]
+
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    # Выводим входное изображение
+    image.show()
+
+    # Произодим пороговую фильтрацию
+    for row in range(height):
+        for col in range(width):
+            if matrix_pixels[row][col] < 200:
+                matrix_pixels[row][col] = 0
+            else:
+                matrix_pixels[row][col] = 255
+
+    # Выводим бинарное изображение
+    image_bin = drawing_image_new(matrix_pixels, width, height)
+    image_bin.save(f'image_er_dil/bin_{file[18:]}')
+    image_bin.show()
+
+    # Если в изображении есть шумы, то применяем медианный фильтр
+    if file != 'image_model_noise/MODEL.jpg':
+        image_bin = spatial_filter_median(image_bin, 5)
+        image_bin.save(f'image_er_dil/filtered_{file[18:]}')
+        image_bin.show()
+        filt_matrix = np.array(image_bin).reshape(height, width)
+
+    # Производим эрозию или дилатацию изображения
+    # new_matrix = erosion(image_bin, 9, 9)
+    new_matrix = dilatation(image_bin, 9, 9)
+    er_image = drawing_image_new(new_matrix, len(new_matrix[0]), len(new_matrix))
+    er_image.save(f'image_er_dil/er_{file[18:]}')
+    er_image.show()
+
+    if file == 'image_model_noise/MODEL.jpg':
+        pix = new_matrix - matrix_pixels  # Для дилатации
+        # pix = matrix_pixels - new_matrix  # Для эрозии
+    else:
+        pix = new_matrix - filt_matrix  # Для дилатации с шумом
+        # pix = filt_matrix - new_matrix  # Для эрозии
+
+    # Выводим контур объекта
+    img = drawing_image_new(pix, width, height)
+    img.save(f'image_er_dil/cont_{file[18:]}')
+    img.show()
+
+
+# ----------------------------------------------------------------------------------------------------
+'''
+Используя методы:
+- изменения размеров;
+- сегментации;
+- пространственной и частотной обработки;
+- градационных преобразований.
+
+Разработать и реализовать максимально автоматизированный или автоматический алгоритм 
+настройки оптимальной яркости и конрастности четырех изображений 
+вертикальных и горизонтальных МРТ срезов:
+2 для позвоночника и 2 для головы, приведя изображения к размерам 400х400.
+
+Формат данных двоичный, целочисленный 2-хбайтовый (short).
+'''
+
+
+def task_mrt():
+    # files = ['mrt/spine-H_x256.bin', 'mrt/spine-V_x512.bin', 'mrt/brain-H_x512.bin', 'mrt/brain-V_x256.bin']
+    files = ['mrt/spine-H_x256.bin']
+    new_width = new_height = 400
+
+    for file in files:
+        # Вычленяем размеры изображения из названия файла
+        width = height = int(re.search(r'\d+', file).group(0))
+
+        # Считываем целые числа по 2 байта
+        bin_file = open_reader(file, format='h')
+
+        # Строим изображение
+        matrix_pixels = np.array(bin_file).reshape(height, width)
+        image = drawing_image_new(matrix_pixels, width, height)
+        image.save(f'mrt/input_{file[4:16]}.jpg')
+        image.show()
+
+        # Строим гистограмму изображения
+        hist_x, hist_y, pixels = image_histogram(image)
+
+        plt.plot(hist_x, hist_y)
+        plt.title(f'Гистограмма {file[4:16]}')
+
+        plt.show()
+
+        # Применяем эвкализацию изображния
+        contr_image = equalization(image)
+        contr_image.save(f'mrt/equal_{file[4:16]}.jpg')
+        contr_image.show()
+
+        # Масштабируем изображение до размеров 400х400
+        if width > new_width:
+            const = width / new_width
+            type_scale = 'nn'
+            mode = 'decreased'
+        else:
+            const = new_width / width
+            type_scale = 'nn'
+            mode = 'increased'
+
+        scale_image = image_scale(contr_image, const, type_scale, mode)
+        scale_image.save(f'mrt/scale_{file[4:16]}.jpg')
+        scale_image.show()
+        scale_matrix = np.array(scale_image).reshape(new_height, new_width)
+
+        # Строим гистограмму изображения после эквализации
+        hist_x, hist_y, pixels = image_histogram(scale_image)
+
+        plt.plot(hist_x, hist_y)
+        plt.title(f'Гистограмма после эквализации {file[4:16]}')
+
+        plt.show()
+
+        # for i in range(1, 10):
+
+        # gamma_matrix = gamma_correction(scale_matrix, const=10, gamma=20)
+        # # gamma_matrix = log_correction(scale_matrix, const=20)
+        # #
+        # gamma_image = drawing_image_new(gamma_matrix, new_width, new_height)
+        # gamma_image.show()
+
+        # # Реализуем Спектр
+        # spectrum_image = ampl_spectr(scale_matrix[100], new_width)
+        # acf_image = acf(spectrum_image, new_width)
+        # spectrum_acf = ampl_spectr(acf_image, new_width)
+        # x_spectrum = np.linspace(0, 1, new_width)
+        #
+        #
+        # # plt.subplot(1, 2, 1)
+        # # plt.plot(x_spectrum[:new_width // 2], spectrum_image[:new_width // 2])
+        # # plt.title(f'Спектр изображения {file[4:16]}')
+        # #
+        # # plt.subplot(1, 2, 2)
+        # # plt.plot(x_spectrum[:new_width // 2], spectrum_acf[:new_width // 2])
+        # #
+        # # plt.title(f'Спектр АКФ')
+        # #
+        # # plt.show()
+        # #
+        # # # m, dt, fc = 64, 1 / 400, 1
+        # # # hpw = high_pass_filter(m, dt, fc)
+        # # # conv_matrix = image_conv(scale_matrix, hpw, new_width, new_height, m)
+        # # #
+        # # #
+        # # #
+        # # # conv_image = drawing_image_new(conv_matrix, new_width, new_height)
+        # # # conv_image.show()
+        # # #
+        # # # filt_image = spatial_filter_median(conv_image, 5)
+        # # # filt_image.show()
+
+
+'''
+Применяя все реализованные методы обработки и анализа изображений,
+а также любые сторонние методыбиблиотеки помимо реализованных
+выделить и автоматически подсчитать на изображении stones.jpg
+камни заданного размера S в двух вариантах:
+1) Выделить только те объекты, у которых размер по каждому из направлений равен S
+2) Выделить камни, у которых размер хотя бы по одному направлению равен 
+ остальных направлениях меньше S
+ S = 11
+'''
+
+
+def count_of_stones():
+    file = 'size_of_object/stones.jpg'
+    image = read_jpg_gray(file)
+    width, height = image.size[0], image.size[1]
+    matrix_pixels = np.array(image).reshape(height, width)
+
+    # Показать входное изображение
+    input_image = drawing_image_new(matrix_pixels, width, height)
+    input_image.show()
+
+    # Гистограмма
+    hist_x, hist_y, pixels = image_histogram(input_image)
+
+    plt.plot(hist_x, hist_y)
+    plt.title('Гистограмма входного изображения')
+    plt.show()
+
+    # Произодим пороговую фильтрацию
+    for row in range(height):
+        for col in range(width):
+            if matrix_pixels[row][col] < 120:
+                matrix_pixels[row][col] = 0
+            else:
+                matrix_pixels[row][col] = 255
+
+    bin_image = drawing_image_new(matrix_pixels, width, height)
+    bin_image.show()
+
+    # Гистограмма
+    hist_x, hist_y, pixels = image_histogram(bin_image)
+
+    plt.plot(hist_x, hist_y)
+    plt.title('Гистограмма бинарного изображения')
+    plt.show()
+
+    # Производим эрозию или дилатацию изображения
+    new_matrix = erosion(bin_image, 3, 3)
+    # new_matrix = dilatation(bin_image, 3, 3)
+    er_image = drawing_image_new(new_matrix, len(new_matrix[0]), len(new_matrix))
+
+    er_image.show()
+
+    if file == 'image_model_noise/MODEL.jpg':
+        pix = new_matrix - matrix_pixels  # Для дилатации
+        # pix = matrix_pixels - new_matrix  # Для эрозии
+    else:
+        pix = new_matrix - matrix_pixels  # Для дилатации с шумом
+        # pix = filt_matrix - new_matrix  # Для эрозии
+
+    # Выводим контур объекта
+    img = drawing_image_new(pix, width, height)
+
+    img.show()
+
+
+
+
+
+    # mask = [
+    #     [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+    #     [0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+    #     [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0],
+    #     [0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
+    #     [1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+    #     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    #     [1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+    #     [0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
+    #     [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0],
+    #     [0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+    #     [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+    # ]
     #
-    # acf_mass = acf(spectrum, h)
-    # plt.plot(spectrum_x, acf_mass)
-    # plt.show()
+    # for row in range(11, height - 11):
+    #     for col in range(11, width - 11):
 
-    m = 32
-    dt = 0.004
-    input_mass = matrix_pix
-    control_mass = low_pass_filter(m, dt, fc=100)
-    conv_matrix = image_conv(input_mass, control_mass, w, h, m)
-    conv_pixels = from_2d_to_1d(conv_matrix, w, h)
 
-    conv_image = drawing_image_new(conv_pixels, w, h)
-    conv_image.show()
+
 
 if __name__ == '__main__':
     # trends()
@@ -1908,5 +2610,14 @@ if __name__ == '__main__':
     # task_gamma_corrextion()
     # task_log_corrextion()
     # task_equalization()
-    task_read_xcr()
-    # task_adding_noise()
+    # task_read_xcr()
+    # task_add_model_noise()
+    # task_spatial_filter_average()
+    # task_spatial_filter_median()
+    # task_image_deconvolution()
+    # task_contour_segmentation()
+    # task_segmentation_gradient()
+    # task_segmentation_laplasian()
+    # task_erosion()
+    # task_mrt()
+    count_of_stones()

@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1ee2b57e-6d38-465f-865d-6880c233e36d" name="Default Changelist" comment="" />
+    <list default="true" id="1ee2b57e-6d38-465f-865d-6880c233e36d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HollywoodLC.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HollywoodLC2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MODEL.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xray.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/func.py" beforeDir="false" afterPath="$PROJECT_DIR$/func.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gauss_noise.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/gauss_noise.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grace.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/h400x300.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/idfvdfsmof.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_400x300.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_gauss_noise.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_hollywood.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_hollywood1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_xray.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result1.1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result1.2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result1.3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result2.1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result2.2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/tasks.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,6 +54,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1TvyetpdhYlcbaDTJuveqZT6xo2" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -35,8 +64,9 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../messager" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -51,7 +81,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.tasks">
-    <configuration name="conv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="equalizer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="application" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -64,7 +94,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/conv.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/equalizer.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -73,7 +103,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="func" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="func" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="application" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -95,7 +125,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="noise" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="popitka_norm_filter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="application" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -108,29 +138,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/noise.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="remove_artefacts" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="application" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/remove_artefacts.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/popitka_norm_filter.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -161,13 +169,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test_image_deconvolution" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="application" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_image_deconvolution.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.tasks" />
-        <item itemvalue="Python.noise" />
-        <item itemvalue="Python.remove_artefacts" />
         <item itemvalue="Python.func" />
-        <item itemvalue="Python.conv" />
+        <item itemvalue="Python.test_image_deconvolution" />
+        <item itemvalue="Python.popitka_norm_filter" />
+        <item itemvalue="Python.equalizer" />
       </list>
     </recent_temporary>
   </component>
@@ -198,6 +228,46 @@
       <workItem from="1584974569629" duration="1316000" />
       <workItem from="1584976245490" duration="5459000" />
       <workItem from="1585054510916" duration="11000" />
+      <workItem from="1585405843966" duration="4789000" />
+      <workItem from="1585430068557" duration="350000" />
+      <workItem from="1585482447216" duration="750000" />
+      <workItem from="1585487463219" duration="8487000" />
+      <workItem from="1585500372037" duration="2035000" />
+      <workItem from="1585507069245" duration="6888000" />
+      <workItem from="1585745090400" duration="17000" />
+      <workItem from="1585955220618" duration="633000" />
+      <workItem from="1586180968284" duration="14630000" />
+      <workItem from="1586243738779" duration="2418000" />
+      <workItem from="1586248676787" duration="8055000" />
+      <workItem from="1586261553758" duration="313000" />
+      <workItem from="1586520781737" duration="559000" />
+      <workItem from="1586525755531" duration="171000" />
+      <workItem from="1586532379841" duration="5285000" />
+      <workItem from="1586696218890" duration="36315000" />
+      <workItem from="1587128853127" duration="789000" />
+      <workItem from="1587302864416" duration="27248000" />
+      <workItem from="1587333145965" duration="221000" />
+      <workItem from="1587393216295" duration="6927000" />
+      <workItem from="1587400899628" duration="15843000" />
+      <workItem from="1587424840077" duration="780000" />
+      <workItem from="1587426776501" duration="33000" />
+      <workItem from="1587466854770" duration="14085000" />
+      <workItem from="1587726386822" duration="8415000" />
+      <workItem from="1587737203418" duration="12351000" />
+      <workItem from="1587836894702" duration="6948000" />
+      <workItem from="1587907645711" duration="27286000" />
+      <workItem from="1588256661971" duration="5284000" />
+      <workItem from="1588335407923" duration="30542000" />
+      <workItem from="1588599195555" duration="10068000" />
+      <workItem from="1588609678649" duration="268000" />
+      <workItem from="1588614490025" duration="1641000" />
+      <workItem from="1589022155771" duration="7953000" />
+      <workItem from="1589121887785" duration="2128000" />
+      <workItem from="1589124036082" duration="609000" />
+      <workItem from="1589129561290" duration="16671000" />
+      <workItem from="1590201132859" duration="28000" />
+      <workItem from="1590241196850" duration="1099000" />
+      <workItem from="1590256018210" duration="2705000" />
     </task>
     <servers />
   </component>
@@ -205,69 +275,123 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="555" y="214" width="800" height="677" key="#Inspections" timestamp="1588260809717">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="555" y="214" width="800" height="677" key="#Inspections/0.27.1920.1053@0.27.1920.1053" timestamp="1588260809717" />
+    <state x="629" y="357" width="652" height="390" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1589023932226">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="629" y="357" width="652" height="390" key="#com.intellij.fileTypes.FileTypeChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1589023932226" />
+    <state x="771" y="444" width="368" height="217" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog" timestamp="1587837186986">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="771" y="444" width="368" height="217" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1587837186986" />
     <state x="634" y="157" width="642" height="790" key="#tasks" timestamp="1583434820950">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="634" y="157" width="642" height="790" key="#tasks/0.27.1920.1053@0.27.1920.1053" timestamp="1583434820950" />
-    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl" timestamp="1585054520457">
+    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl" timestamp="1587129883436">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1585054520457" />
-    <state width="1874" height="189" key="GridCell.Tab.0.bottom" timestamp="1585053122303">
+    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1587129883436" />
+    <state width="1874" height="141" key="GridCell.Tab.0.bottom" timestamp="1590261003837">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="189" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1585053122303" />
+    <state width="1874" height="141" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1590261003837" />
     <state width="1874" height="2" key="GridCell.Tab.0.bottom/0.27.3286.1053@0.27.3286.1053" timestamp="1583783694404" />
-    <state width="1874" height="189" key="GridCell.Tab.0.center" timestamp="1585053122303">
+    <state width="1874" height="141" key="GridCell.Tab.0.center" timestamp="1590261003836">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="189" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1585053122303" />
+    <state width="1874" height="141" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1590261003836" />
     <state width="1874" height="2" key="GridCell.Tab.0.center/0.27.3286.1053@0.27.3286.1053" timestamp="1583783694403" />
-    <state width="1874" height="189" key="GridCell.Tab.0.left" timestamp="1585053122303">
+    <state width="1874" height="141" key="GridCell.Tab.0.left" timestamp="1590261003836">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="189" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1585053122303" />
+    <state width="1874" height="141" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1590261003836" />
     <state width="1874" height="2" key="GridCell.Tab.0.left/0.27.3286.1053@0.27.3286.1053" timestamp="1583783694403" />
-    <state width="1874" height="189" key="GridCell.Tab.0.right" timestamp="1585053122303">
+    <state width="1874" height="141" key="GridCell.Tab.0.right" timestamp="1590261003836">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="189" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1585053122303" />
+    <state width="1874" height="141" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1590261003836" />
     <state width="1874" height="2" key="GridCell.Tab.0.right/0.27.3286.1053@0.27.3286.1053" timestamp="1583783694404" />
-    <state width="1874" height="43" key="GridCell.Tab.1.bottom" timestamp="1584962908479">
+    <state width="1874" height="443" key="GridCell.Tab.1.bottom" timestamp="1589151558965">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="43" key="GridCell.Tab.1.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1584962908479" />
-    <state width="1874" height="43" key="GridCell.Tab.1.center" timestamp="1584962908479">
+    <state width="1874" height="443" key="GridCell.Tab.1.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1589151558965" />
+    <state width="1874" height="443" key="GridCell.Tab.1.center" timestamp="1589151558965">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="43" key="GridCell.Tab.1.center/0.27.1920.1053@0.27.1920.1053" timestamp="1584962908479" />
-    <state width="1874" height="43" key="GridCell.Tab.1.left" timestamp="1584962908478">
+    <state width="1874" height="443" key="GridCell.Tab.1.center/0.27.1920.1053@0.27.1920.1053" timestamp="1589151558965" />
+    <state width="1874" height="443" key="GridCell.Tab.1.left" timestamp="1589151558964">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="43" key="GridCell.Tab.1.left/0.27.1920.1053@0.27.1920.1053" timestamp="1584962908478" />
-    <state width="1874" height="43" key="GridCell.Tab.1.right" timestamp="1584962908479">
+    <state width="1874" height="443" key="GridCell.Tab.1.left/0.27.1920.1053@0.27.1920.1053" timestamp="1589151558964" />
+    <state width="1874" height="443" key="GridCell.Tab.1.right" timestamp="1589151558965">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="43" key="GridCell.Tab.1.right/0.27.1920.1053@0.27.1920.1053" timestamp="1584962908479" />
-    <state x="449" y="187" key="SettingsEditor" timestamp="1583773148625">
+    <state width="1874" height="443" key="GridCell.Tab.1.right/0.27.1920.1053@0.27.1920.1053" timestamp="1589151558965" />
+    <state x="718" y="214" width="473" height="676" key="RollbackChangesDialog" timestamp="1586181146051">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="449" y="187" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1583773148625" />
-    <state x="1096" y="381" key="com.intellij.ide.util.TipDialog" timestamp="1585054511962">
+    <state x="718" y="214" width="473" height="676" key="RollbackChangesDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1586181146051" />
+    <state x="449" y="187" key="SettingsEditor" timestamp="1586720675451">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="1096" y="381" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1585054511962" />
-    <state x="623" y="257" width="672" height="678" key="search.everywhere.popup" timestamp="1584973225623">
+    <state x="449" y="187" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1586720675451" />
+    <state x="689" y="286" width="540" height="524" key="StructurePopup" timestamp="1587837232610">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="623" y="257" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1584973225623" />
+    <state x="689" y="286" width="540" height="524" key="StructurePopup/0.27.1920.1053@0.27.1920.1053" timestamp="1587837232610" />
+    <state width="960" height="527" key="XDebugger.FullValuePopup" timestamp="1588361778787">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="960" height="527" key="XDebugger.FullValuePopup/0.27.1920.1053@0.27.1920.1053" timestamp="1588361778787" />
+    <state x="1096" y="381" key="com.intellij.ide.util.TipDialog" timestamp="1590201137952">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="1096" y="381" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1590201137952" />
+    <state x="728" y="472" width="454" height="160" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587470908271">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="728" y="472" width="454" height="160" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.27.1920.1053@0.27.1920.1053" timestamp="1587470908271" />
+    <state x="0" y="317" width="1720" height="855" key="dock-window-1" timestamp="1589024831036">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="0" y="317" width="1720" height="855" key="dock-window-1/0.27.1920.1053@0.27.1920.1053" timestamp="1589024831036" />
+    <state x="608" y="119" width="704" height="867" key="find.popup" timestamp="1587837249138">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="608" y="119" width="704" height="867" key="find.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1587837249138" />
+    <state x="704" y="196" width="501" height="713" key="refactoring.ChangeSignatureDialog" timestamp="1589024836906">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="704" y="196" width="501" height="713" key="refactoring.ChangeSignatureDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1589024836906" />
+    <state x="623" y="257" width="672" height="678" key="search.everywhere.popup" timestamp="1588366470658">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="623" y="257" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1588366470658" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="files" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/application$func.coverage" NAME="func Coverage Results" MODIFIED="1584884952060" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/application$test_filters.coverage" NAME="test_filters Coverage Results" MODIFIED="1587333218887" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/application$conv.coverage" NAME="conv Coverage Results" MODIFIED="1584046455398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/application$noise.coverage" NAME="noise Coverage Results" MODIFIED="1584972294590" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/application$popitka_norm_filter.coverage" NAME="popitka_norm_filter Coverage Results" MODIFIED="1587735293666" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/application$testing.coverage" NAME="testing Coverage Results" MODIFIED="1587331876803" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/application$hist.coverage" NAME="hist Coverage Results" MODIFIED="1587404455726" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/application$temo.coverage" NAME="temo Coverage Results" MODIFIED="1586720699292" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/application$tasks.coverage" NAME="tasks Coverage Results" MODIFIED="1590261003820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/application$func.coverage" NAME="func Coverage Results" MODIFIED="1589027333763" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/application$test_image_deconvolution.coverage" NAME="test_image_deconvolution Coverage Results" MODIFIED="1588348835061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/application$equalization.coverage" NAME="equalization Coverage Results" MODIFIED="1583773995182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/application$equalizer.coverage" NAME="equalizer Coverage Results" MODIFIED="1587480210524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/application$remove_artefacts.coverage" NAME="remove_artefacts Coverage Results" MODIFIED="1584967530530" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/application$tasks.coverage" NAME="tasks Coverage Results" MODIFIED="1585040494143" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
